@@ -6,7 +6,7 @@
 #                      WORDLIST: a Python-readable document containing a list of newline-separated words                      #
 #                                       -v: verbose mode (outputs word being attempted)                                       #
 #                                       RUN WITH -h TO VIEW THIS HELP MESSAGE AND EXIT                                        #
-#																														      #
+#                                                                                                                             #
 #                                                      have fun skiddies                                                      #
 #                                                            -YBC                                                             #
 ###############################################################################################################################
