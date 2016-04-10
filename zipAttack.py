@@ -7,6 +7,8 @@
 #                                       -v: verbose mode (outputs word being attempted)                                       #
 #                                       RUN WITH -h TO VIEW THIS HELP MESSAGE AND EXIT                                        #
 #                                                                                                                             #
+#                                    KNOWN ISSUES: It doesn't play nice with big word lists                                   #
+#                                                                                                                             #
 #                                                      have fun skiddies                                                      #
 #                                                            -YBC                                                             #
 ###############################################################################################################################
