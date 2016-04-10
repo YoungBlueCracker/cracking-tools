@@ -42,7 +42,6 @@ def main():
 	
 	# now for the juicy bit - first we open the file specified by the user on the command line
 	with open(wname) as f:
-		# now we iterate through each line of the file
 		for line in f:
 			# we use line.strip() here to ensure that only the word is tried, not the word with a trailing newline
 			password = line.strip()
