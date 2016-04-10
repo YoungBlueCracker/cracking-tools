@@ -1,2 +1,2 @@
 # cracking-tools
-A collection of cracking tools written in Python.
+A collection of cracking tools (mainly written in Python).
