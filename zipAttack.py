@@ -67,6 +67,6 @@ def main():
 	# \033[91m changes the terminal text colour to red whilst \033[0m changes the terminal text colour back to
 	# its original colour
 	print
-	print "\033[91m[-] Failed: Could not find password in supplied wordlist [%s]\033[0m" % wname.split('\')[-1]
+	print "\033[91m[-] Failed: Could not find password in supplied wordlist [%s]\033[0m" % (wname.split('\\')[-1] if sys.platform = "win32" else wname.split('/')[-1])
 
 main()
