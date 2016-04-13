@@ -1,6 +1,7 @@
 ###############################################################################################################################
 #                                                        ZIPATTACK.PY                                                         #
 #                           A TOOL TO CRACK PASSWORD-PROTECTED ZIP FILES USING A DICTIONARY ATTACK                            #
+#                                                                                                                             #
 #                                    USAGE: zipAttack.py -f <FILENAME> -w <WORDLIST> [-v]                                     #
 #                                                     FILENAME: a zip file                                                    #
 #                      WORDLIST: a Python-readable document containing a list of newline-separated words                      #
