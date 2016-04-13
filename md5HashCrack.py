@@ -12,9 +12,9 @@ def main():
         with open(filename) as f:
             with open(wordlist) as w:
                 for line in f:
-                    for line in w:
+                    for word in w:
                         m = hashlib.md5()
-                        m.update(line)
+                        m.update(word)
                         if m.hexdigest() == hash:
                             print "Found password: %s" % word
     except:
