@@ -7,7 +7,7 @@ FILENAME: a zip file <br />
 WORDLIST: the word list used to attack the zip file with <br />
 -v: verbose mode (reports which password it's attempting to crack the zip file with)
 
-<hr />
+<hr>
 
 #### md5HashCrack.py
 USAGE : `md5HashCrack.py <FILENAME> <WORDLIST>` [-h] [-v] <br />
