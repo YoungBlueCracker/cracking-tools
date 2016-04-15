@@ -59,8 +59,8 @@ def main():
 				print "\033[92m[+] Success! Found password for archive %s: '%s'\033[0m" % (zname, password)
 				os._exit(1)
 			# normally trying to use z.extractall() with an incorrect password (i.e. every iteration of the loop)
-			# would raise a bad password exception but the pass statement is basically saying
-			# "just keep going at it without telling anyone your problems we don't care"
+			# would raise a bad password exception but the pass statement stops this
+			# exception being raised
 			except:
 				pass
 	
@@ -68,6 +68,6 @@ def main():
 	# \033[91m changes the terminal text colour to red whilst \033[0m changes the terminal text colour back to
 	# its original colour
 	print
-	print "\033[91m[-] Failed: Could not find password in supplied wordlist [%s]\033[0m" % (wname.split('\\')[-1] if sys.platform = "win32" else wname.split('/')[-1])
+	print "\033[91m[-] Failed: Could not find password in supplied wordlist [%s]\033[0m" % (wname.split('\\')[-1] if sys.platform == "win32" else wname.split('/')[-1])
 
 main()
