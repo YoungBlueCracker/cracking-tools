@@ -59,8 +59,7 @@ def main():
 				print "\033[92m[+] Success! Found password for archive %s: '%s'\033[0m" % (zname, password)
 				os._exit(1)
 			# normally trying to use z.extractall() with an incorrect password (i.e. every iteration of the loop)
-			# would raise a bad password exception but the pass statement stops this
-			# exception being raised
+			# would raise a bad password exception but the pass statement stops this exception being raised
 			except:
 				pass
 	
