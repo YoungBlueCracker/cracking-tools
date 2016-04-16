@@ -14,7 +14,13 @@
 #                                                            -YBC                                                             #
 ###############################################################################################################################
 
-import zipfile, optparse, os
+import zipfile, optparse, os, sys
+
+# this class maps the text colour-altering ANSI strings to class variables so as to improve the code readability later on
+class Text_Colours:
+	RED = "\033[91m"
+	GREEN = "\033[92m"
+	RESET = "\033[0m"
 
 def main():
 	# I wanted to do optparse in a separate function but I also didn't want to use any global variables so here we are
@@ -35,15 +41,16 @@ def main():
 	z = zipfile.ZipFile(zname)
 	
 	# we'll first just try to extract without any password, just in case the zip file doesn't actually have a password
+	# the reason I use the evil os._exit(1) is because, fun fact, the regular exit(0) raises a SystemExit exception
+	# so control would be directed to the except block, which would then execute pass and wouldn't exit the program at all
 	try:
 		z.extractall()
 		print
-		print "\033[92m[+] Success! This archive didn't have a password.\033[0m"
+		print Text_Colours.GREEN + "[+] Success! This archive didn't have a password." + Text_Colours.RESET
 		os._exit(1)
 	except:
 		pass
 	
-	# now for the juicy bit - first we open the file specified by the user on the command line
 	with open(wname) as f:
 		for line in f:
 			# we use line.strip() here to ensure that only the word is tried, not the word with a trailing newline
@@ -52,21 +59,20 @@ def main():
 				if verbosity:
 					print "[*] Trying password '%s'..." % password
 				z.extractall(pwd=password)
-				# this part will only print if there was no exception raised and therefore the password was correct
-				# the escape sequence \033[92m colours the terminal text green so it stands out
-				# \033[0m at the end of the line changes the colour back to the original one
+				# this part will only print if there was no exception raised, control wasn't directed to the except block and
+				# therefore the password was correct
 				print
-				print "\033[92m[+] Success! Found password for archive %s: '%s'\033[0m" % (zname, password)
+				print (Text_Colours.GREEN + "[+] Success! Found password for archive %s: '%s'" + Text_Colours.RESET) % (zname, password)
+				print (Text_Colours.GREEN + "[+] Extracted archive '%s'" + Text_Colours.RESET) % (zname.split('\\')[-1] if sys.platform == "win32" else zname.split('/')[-1])
 				os._exit(1)
 			# normally trying to use z.extractall() with an incorrect password (i.e. every iteration of the loop)
-			# would raise a bad password exception but the pass statement stops this exception being raised
+			# would raise a bad password exception and let us know about it but the pass statement stops this exception message
+        		# from being printed
 			except:
 				pass
 	
 	# only runs if the word list is exhausted
-	# \033[91m changes the terminal text colour to red whilst \033[0m changes the terminal text colour back to
-	# its original colour
 	print
-	print "\033[91m[-] Failed: Could not find password in supplied wordlist [%s]\033[0m" % (wname.split('\\')[-1] if sys.platform == "win32" else wname.split('/')[-1])
+	print (Text_Colours.RED + "[-] Failed: Could not find password in supplied wordlist [%s]" + Text_Colours.RESET) % (wname.split('\\')[-1] if sys.platform == "win32" else wname.split('/')[-1])
 
 main()
