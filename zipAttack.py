@@ -16,16 +16,19 @@
 
 import zipfile, optparse, os, sys
 
-# this class maps the text colour-altering ANSI strings to class variables so as to improve the code readability later on
-class Text_Colours:
-	RED = "\033[91m"
-	GREEN = "\033[92m"
-	RESET = "\033[0m"
+# here I map the text colour-altering ANSI strings to global variables so as to increase code readability later on
+global TEXT_COLOUR_GREEN
+global TEXT_COLOUR_RED
+global TEXT_COLOUR_RESET
+
+TEXT_COLOUR_GREEN = "\033[92m"
+TEXT_COLOUR_RED = "\033[91m"
+TEXT_COLOUR_RESET = "\033[0m"
 
 def main():
-	# I wanted to do optparse in a separate function but I also didn't want to use any global variables so here we are
+	# I wanted to do optparse in a separate function but I also didn't want to use many global variables so here we are
 	# I'll also probably replace optparse with argparse next program since optparse is deprecated now anyway
-	parser = optparse.OptionParser("Usage: python zipAttack.py -f <zipfile> -w <wordlist>")
+	parser = optparse.OptionParser("Usage: zipAttack.py -f <zipfile> -w <wordlist>")
 	parser.add_option("-f", dest="zname", type="string", help="specify zip file (required)")
 	parser.add_option("-w", dest="wname", type="string", help="specify word list (required)")
 	parser.add_option("-v", dest="verbosity", action="store_true", help="increase verbosity (not required, default false)")
@@ -46,7 +49,7 @@ def main():
 	try:
 		z.extractall()
 		print
-		print Text_Colours.GREEN + "[+] Success! This archive didn't have a password." + Text_Colours.RESET
+		print TEXT_COLOUR_GREEN + "[+] Success! This archive didn't have a password." + TEXT_COLOUR_RESET
 		os._exit(1)
 	except:
 		pass
@@ -62,17 +65,18 @@ def main():
 				# this part will only print if there was no exception raised, control wasn't directed to the except block and
 				# therefore the password was correct
 				print
-				print (Text_Colours.GREEN + "[+] Success! Found password for archive %s: '%s'" + Text_Colours.RESET) % (zname, password)
-				print (Text_Colours.GREEN + "[+] Extracted archive '%s'" + Text_Colours.RESET) % (zname.split('\\')[-1] if sys.platform == "win32" else zname.split('/')[-1])
+				print (TEXT_COLOUR_GREEN + "[+] Success! Found password for archive '%s': '%s'") % (zname, password)
+				print ("[+] Extracted archive '%s'" + TEXT_COLOUR_RESET) % (os.path.split(zname)[1])
 				os._exit(1)
 			# normally trying to use z.extractall() with an incorrect password (i.e. every iteration of the loop)
 			# would raise a bad password exception and let us know about it but the pass statement stops this exception message
-        		# from being printed
+			# from being printed
 			except:
 				pass
 	
 	# only runs if the word list is exhausted
 	print
-	print (Text_Colours.RED + "[-] Failed: Could not find password in supplied wordlist [%s]" + Text_Colours.RESET) % (wname.split('\\')[-1] if sys.platform == "win32" else wname.split('/')[-1])
+	print (TEXT_COLOUR_RED + "[-] Failed: Could not find password in supplied wordlist [%s]" + TEXT_COLOUR_RESET) % (os.path.split(wname)[1])
 
-main()
+if __name__ == "__main__":
+	main()
