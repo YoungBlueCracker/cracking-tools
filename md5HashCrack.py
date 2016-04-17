@@ -14,6 +14,13 @@
 
 import hashlib, argparse
 
+# this class maps three text colour-altering ANSI strings to class variables so as to improve code readability later on in the
+# program
+class Text_Colours:
+	GREEN = "\033[92m"
+	RED = "\033[91m"
+	RESET = "\033[0m
+
 def main():
 	# I actually used argparse this time. It's a lot more user-friendly and not deprecated
 	parser = argparse.ArgumentParser()
@@ -61,19 +68,18 @@ def main():
 	print
 	
 	# I know that formatting a string conditionally inside an if statement is probably bad practice but fuck it, it looks good
-	# \033[92m turns the text green, \033[91m turns it red, \033[0m turns it back to its original colour
 	if len(crackedHashes) > 0:
-		print "\033[92m[+] Cracked %i %s (%i total)" % (len(crackedHashes), ("hashes" if len(crackedHashes) != 1 else "hash"), (len(crackedHashes) + len(uncrackedHashes)))
+		print (Text_Colours.GREEN + "[+] Cracked %i %s (%i total)") % (len(crackedHashes), ("hashes" if len(crackedHashes) != 1 else "hash"), (len(crackedHashes) + len(uncrackedHashes)))
 		for i in crackedHashes:
 			m = hashlib.md5()
 			m.update(i)
 			print "[+] %s [%s]" % (i, m.hexdigest())
-		print "\033[0m"	
+		print Text_Colours.RESET	
 	
 	if len(uncrackedHashes) > 0:
-		print "\033[91m[-] Failed to crack %i %s (%i total)" % (len(uncrackedHashes), ("hashes" if len(uncrackedHashes) != 1 else "hash"), (len(crackedHashes) + len(uncrackedHashes)))
+		print (Text_Colours.RED + "[-] Failed to crack %i %s (%i total)") % (len(uncrackedHashes), ("hashes" if len(uncrackedHashes) != 1 else "hash"), (len(crackedHashes) + len(uncrackedHashes)))
 		for i in uncrackedHashes:
 			print "[-] %s" % i
-		print "\033[0m"
+		print Text_Colours.RESET
 
 main()
