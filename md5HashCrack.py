@@ -14,18 +14,20 @@
 
 import hashlib, argparse
 
-# this class maps three text colour-altering ANSI strings to class variables so as to improve code readability later on in the
-# program
-class Text_Colours:
-	GREEN = "\033[92m"
-	RED = "\033[91m"
-	RESET = "\033[0m
+# here I map three text colour-altering ANSI strings to global variables to increase readability later in the program
+global TEXT_COLOUR_GREEN
+global TEXT_COLOUR_RED
+global TEXT_COLOUR_RESET
+
+TEXT_COLOUR_GREEN = "\033[92m"
+TEXT_COLOUR_RED = "\033[91m"
+TEXT_COLOUR_RESET = "\033[0m"
 
 def main():
 	# I actually used argparse this time. It's a lot more user-friendly and not deprecated
 	parser = argparse.ArgumentParser()
 	parser.add_argument("filename", help = "File to crack MD5 hashes from (each hash must be on its own newline-separated line)", metavar = "<FILENAME>")
-	parser.add_argument("wordlist", help = "Wordlist containing possible passwords (each word must be on its own newline-separated line)", metavar = "<WORDLIST>")
+	parser.add_argument("wordlist", help = "Wordlist containing possible plaintext for the hashes (each word must be on its own newline-separated line)", metavar = "<WORDLIST>")
 	parser.add_argument("-v", "--verbosity", help = "Run program in verbose mode (outputs words being tested against hash. Not required, default False)", action = "store_true")
 	args = parser.parse_args()
 	if (args.filename == None) | (args.wordlist == None):
@@ -69,17 +71,18 @@ def main():
 	
 	# I know that formatting a string conditionally inside an if statement is probably bad practice but fuck it, it looks good
 	if len(crackedHashes) > 0:
-		print (Text_Colours.GREEN + "[+] Cracked %i %s (%i total)") % (len(crackedHashes), ("hashes" if len(crackedHashes) != 1 else "hash"), (len(crackedHashes) + len(uncrackedHashes)))
+		print (TEXT_COLOUR_GREEN + "[+] Cracked %i %s (%i total)") % (len(crackedHashes), ("hashes" if len(crackedHashes) != 1 else "hash"), (len(crackedHashes) + len(uncrackedHashes)))
 		for i in crackedHashes:
 			m = hashlib.md5()
 			m.update(i)
 			print "[+] %s [%s]" % (i, m.hexdigest())
-		print Text_Colours.RESET	
+		print TEXT_COLOUR_RESET	
 	
 	if len(uncrackedHashes) > 0:
-		print (Text_Colours.RED + "[-] Failed to crack %i %s (%i total)") % (len(uncrackedHashes), ("hashes" if len(uncrackedHashes) != 1 else "hash"), (len(crackedHashes) + len(uncrackedHashes)))
+		print (TEXT_COLOUR_RED + "[-] Failed to crack %i %s (%i total)") % (len(uncrackedHashes), ("hashes" if len(uncrackedHashes) != 1 else "hash"), (len(crackedHashes) + len(uncrackedHashes)))
 		for i in uncrackedHashes:
 			print "[-] %s" % i
-		print Text_Colours.RESET
+		print TEXT_COLOUR_RESET
 
-main()
+if __name__ == "__main__":
+	main()
