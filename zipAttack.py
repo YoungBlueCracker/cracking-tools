@@ -16,6 +16,7 @@
 
 import zipfile, optparse, os, sys
 
+# I'll swap to argparse next time, since optparse is deprecated now
 def parse():
 	parser = optparse.OptionParser("Usage: zipAttack.py -f <zipfile> -w <wordlist>")
 	parser.add_option("-f", dest="zname", type="string", help="specify zip file (required)")
