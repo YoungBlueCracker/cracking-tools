@@ -2,25 +2,40 @@
 
 import zipfile, argparse
 
+def tryCrack(string, zipFile):
+    try:
+        
+    except:
+
 def parse():
     parser = argparse.ArgumentParser()
     parser.add_argument("noOfLetters", metavar = "<NOOFLETTERS>", type = int, help = "How many letters does the password contain?")
+    parser.add_argument("zipFile", metavar = "<ZIPFILE>", help = "The zip file that we are attempting to crack.")
     args = parser.parse_args()
-    if args.noOfLetters == None:
+    if (args.noOfLetters == None) || (args.zipFile == None):
         print parser.usage()
         exit(0)
     else:
         noOfLetters = args.noOfLetters
+        zipFile = args.zipFile
         
     return noOfLetters
     
 def main():
     noOfLetters = parse()
+    z = zipfile.ZipFile()
     startString = []
+    flag_found = False
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    flag_found = True
     
     for i in range(noOfLetters):
-        startString += "A"
+        startString.append("A")
     
-    
+    while not flag_found:
+        for letter in alphabet:
+            startString[-1] = letter
+            tryCrack(str(startString), z)
+            if startString[-1] = "Z":
+                for i in reversed(startString):
+                    if (i == "Z") && (i != len(startString)):
+                        startString[i] = chr(ord(startString[i] + 1))
