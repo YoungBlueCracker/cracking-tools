@@ -1,12 +1,17 @@
 # Still very much a work in progress
 
-import zipfile, argparse
+import zipfile, argparse, math
+
+TEXT_COLOUR_GREEN = "\033[92m" 
+TEXT_COLOUR_RED = "\033[91m" 
+TEXT_COLOUR_RESET = "\033[0m" 
+
 
 def tryCrack(password, zipFile):
     try:
         zipFile.extractall(pwd = password)
-        print "Found password: %s" % password
-        print "Extracted %s" % zipfile
+        print (TEXT_COLOUR_GREEN + "Found password: %s" % password)
+        print ("Extracted %s" % zipfile) + TEXT_COLOUR_RESET
         exit(0)
     except RuntimeError:
         return
@@ -35,7 +40,7 @@ def main():
     for i in range(noOfLetters):
         startString.append("A")
     
-    while not flag_found:
+    while attempts != ((math.factorial(26)) / (math.factorial(noOfLetters) * math.factorial(26 - noOfLetters)):
         for letter in alphabet:
             startString[-1] = letter
             tryCrack(str(startString), z)
