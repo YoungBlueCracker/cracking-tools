@@ -1,7 +1,8 @@
-# Still very much a work in progress
+# still very much a work in progress
 
 import zipfile, argparse, math
 
+# these variables will improve readability later on in the program
 TEXT_COLOUR_GREEN = "\033[92m" 
 TEXT_COLOUR_RED = "\033[91m" 
 TEXT_COLOUR_RESET = "\033[0m" 
@@ -36,11 +37,15 @@ def main():
     startString = []
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
+    # in case the zip file doesn't actually have a password
     try:
         z.extractall()
+        print (TEXT_COLOUR_GREEN + "Success! This archive didn't have a password.")
+        print (("Extracted %s" % z) + TEXT_COLOUR_RESET)
     except RuntimeError:
         pass
     
+    # 
     for i in range(noOfLetters):
         startString.append("A")
     
