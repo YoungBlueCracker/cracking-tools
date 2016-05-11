@@ -2,9 +2,9 @@
 
 import zipfile, argparse
 
-def tryCrack(string, zipFile):
+def tryCrack(password, zipFile):
     try:
-        
+        zipFile.extractall(pwd = string)
     except:
 
 def parse():
@@ -12,7 +12,7 @@ def parse():
     parser.add_argument("noOfLetters", metavar = "<NOOFLETTERS>", type = int, help = "How many letters does the password contain?")
     parser.add_argument("zipFile", metavar = "<ZIPFILE>", help = "The zip file that we are attempting to crack.")
     args = parser.parse_args()
-    if (args.noOfLetters == None) || (args.zipFile == None):
+    if (args.noOfLetters == None) or (args.zipFile == None):
         print parser.usage()
         exit(0)
     else:
@@ -37,5 +37,5 @@ def main():
             tryCrack(str(startString), z)
             if startString[-1] = "Z":
                 for i in reversed(startString):
-                    if (i == "Z") && (i != len(startString)):
+                    if (i == "Z") and (i != len(startString)):
                         startString[i] = chr(ord(startString[i] + 1))
