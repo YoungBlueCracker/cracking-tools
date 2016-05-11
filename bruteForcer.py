@@ -11,7 +11,7 @@ def tryCrack(password, zipFile):
     try:
         zipFile.extractall(pwd = password)
         print (TEXT_COLOUR_GREEN + "Found password: %s" % password)
-        print ("Extracted %s" % zipfile) + TEXT_COLOUR_RESET
+        print (("Extracted %s" % zipfile) + TEXT_COLOUR_RESET)
         exit(0)
     except RuntimeError:
         return
@@ -34,7 +34,6 @@ def main():
     noOfLetters = parse()
     z = zipfile.ZipFile()
     startString = []
-    flag_found = False
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
     for i in range(noOfLetters):
@@ -42,9 +41,12 @@ def main():
     
     while attempts != ((math.factorial(26)) / (math.factorial(noOfLetters) * math.factorial(26 - noOfLetters)):
         for letter in alphabet:
-            startString[-1] = letter
             tryCrack(str(startString), z)
+            startString[-1] = letter
             if startString[-1] = "Z":
                 for i in reversed(startString):
                     if (i == "Z") and (i != len(startString)):
                         startString[i] = chr(ord(startString[i] + 1))
+
+print (TEXT_COLOUR_RED + "Sorry, the zip file's password was not found!" + TEXT_COLOUR_RESET)
+exit(0)
