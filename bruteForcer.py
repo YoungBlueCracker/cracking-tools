@@ -4,8 +4,12 @@ import zipfile, argparse
 
 def tryCrack(password, zipFile):
     try:
-        zipFile.extractall(pwd = string)
-    except:
+        zipFile.extractall(pwd = password)
+        print "Found password: %s" % password
+        print "Extracted %s" % zipfile
+        exit(0)
+    except RuntimeError:
+        return
 
 def parse():
     parser = argparse.ArgumentParser()
