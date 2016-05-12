@@ -7,7 +7,6 @@ TEXT_COLOUR_GREEN = "\033[92m"
 TEXT_COLOUR_RED = "\033[91m" 
 TEXT_COLOUR_RESET = "\033[0m" 
 
-
 def tryCrack(password, zipFile):
     try:
         zipFile.extractall(pwd = password)
@@ -16,6 +15,10 @@ def tryCrack(password, zipFile):
         os._exit(0)
     except RuntimeError:
         return
+
+# used later
+def nCr(n, r):
+    return (math.factorial(n)) / ((math.factorial(r) * math.factorial(n - r))
 
 def parse():
     parser = argparse.ArgumentParser()
@@ -29,7 +32,7 @@ def parse():
         noOfLetters = args.noOfLetters
         zipFile = args.zipFile
         
-    return noOfLetters
+    return args
     
 def main():
     noOfLetters = parse()
@@ -45,11 +48,13 @@ def main():
     except RuntimeError:
         pass
     
-    # 
+    # creates an array of size noOfLetters and sets each element in the array to "A" (strings are immutable; arrays aren't)
     for i in range(noOfLetters):
         startString.append("A")
     
-    for i in range(((math.factorial(26)) / (math.factorial(noOfLetters) * math.factorial(26 - noOfLetters))):
+    
+    # the range is 26 choose noOfLetters, which is the maximum number of combinations that the password can possibly be
+    for i in range(nCr(26, noOfLetters)):
         for letter in alphabet:
             tryCrack(str(startString), z)
             startString[-1] = letter
@@ -61,3 +66,5 @@ def main():
 
     print (TEXT_COLOUR_RED + "Sorry, the zip file's password was not found!" + TEXT_COLOUR_RESET)
     exit(0)
+
+main()
