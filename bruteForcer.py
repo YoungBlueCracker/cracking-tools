@@ -18,7 +18,7 @@ def tryCrack(password, zipFile):
 
 # used later
 def nCr(n, r):
-    return (math.factorial(n)) / ((math.factorial(r) * math.factorial(n - r))
+	return (math.factorial(n)) / ((math.factorial(r) * math.factorial(n - r)))
 
 def parse():
     parser = argparse.ArgumentParser()
@@ -35,8 +35,8 @@ def parse():
     return args
     
 def main():
-    noOfLetters = parse()
-    z = zipfile.ZipFile()
+    args = parse()
+    z = zipfile.ZipFile(args.zipFile)
     startString = []
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
@@ -49,18 +49,19 @@ def main():
         pass
     
     # creates an array of size noOfLetters and sets each element in the array to "A" (strings are immutable; arrays aren't)
-    for i in range(noOfLetters):
+    for i in range(args.noOfLetters):
         startString.append("A")
     
     
     # the range is 26 choose noOfLetters, which is the maximum number of combinations that the password can possibly be
-    for i in range(nCr(26, noOfLetters)):
+    for i in range(nCr(26, args.noOfLetters)):
         for letter in alphabet:
             tryCrack(str(startString), z)
             startString[-1] = letter
-            if startString[-1] = "Z":
+            if startString[-1] == "Z":
                 for j in reversed(startString):
                     if (j == "Z") and (j != len(startString)):
+                        # got an error here, still figuring out how to fix it
                         startString[j - 1] = chr(ord(startString[j] + 1))
                         startString[j] = "A"
 
