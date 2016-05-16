@@ -12,7 +12,7 @@ def tryCrack(password, zipFile):
         zipFile.extractall(pwd = password)
         print (TEXT_COLOUR_GREEN + "Found password: %s" % password)
         print (("Extracted %s" % zipfile) + TEXT_COLOUR_RESET)
-        os._exit(0)
+        exit(0)
     except RuntimeError:
         return
 
