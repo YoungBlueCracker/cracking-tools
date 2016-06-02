@@ -9,8 +9,8 @@ TEXT_COLOUR_GREEN = "\033[92m"
 TEXT_COLOUR_RED = "\033[91m" 
 TEXT_COLOUR_RESET = "\033[0m" 
 
-# I would except only RuntimeError here normally but if I do I get an "Invalid code lengths set" error pretty soon after it starts to run
-# If anyone knows what causes this, I'd love to know!
+# I would except only RuntimeError here normally but if I do I get an "Invalid code lengths set" error pretty soon after it starts
+# to run - if anyone knows what causes this, I'd love to know!
 def tryCrack(password, zipFile):
 	try:
 		zipFile.extractall(pwd = password)
