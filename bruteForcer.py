@@ -1,6 +1,6 @@
 # still very much a work in progress
 
-import zipfile, argparse, math, os, time, sys
+import zipfile, argparse, os, time, sys
 
 startTime = time.clock()
 
@@ -9,27 +9,11 @@ TEXT_COLOUR_GREEN = "\033[92m"
 TEXT_COLOUR_RED = "\033[91m" 
 TEXT_COLOUR_RESET = "\033[0m" 
 
-# I would except only RuntimeError here normally but if I do I get an "Invalid code lengths set" error pretty soon after it starts
-# to run - if anyone knows what causes this, I'd love to know!
-def tryCrack(password, zipFile):
-	try:
-		zipFile.extractall(pwd = password)
-		print
-		print (TEXT_COLOUR_GREEN + ("[+] Success! Found password for archive '%s' in %s seconds: '%s'" % (args.zipFile, round(time.clock() - startTime, 2), password)))
-		print (("[+] Extracted archive '%s'." % args.zipFile) + TEXT_COLOUR_RESET)
-		os._exit(1)
-	except:
-		return
-
-# used later
-def nCr(n, r):
-	return (math.factorial(n)) / ((math.factorial(r) * math.factorial(n - r)))
-
 def parse():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("noOfLetters", metavar = "<NOOFLETTERS>", type = int, help = "How many letters does the password contain?")
 	parser.add_argument("zipFile", metavar = "<ZIPFILE>", help = "The zip file that we are attempting to crack.")
-	parser.add_argument("characterSet", metavar = "CHARACTERSET=A[a[n[s]]]", help = "The character set to use. Choose A for uppercase letters, a for lowercase letters, n for numbers, and s for special characters.")
+	parser.add_argument("characterSet", metavar = "<CHARACTERSET>", help = "The character set to use. Type A for uppercase letters, a for lowercase letters, n for numbers, and s for special characters. You can use any combination of A, a, n or s.")
 	parser.add_argument("-v", "--verbosity", help = "Run program in verbose mode", action = "store_true", default = False)
 	args = parser.parse_args()
 	if (args.noOfLetters == None) or (args.zipFile == None) or (args.characterSet == None):
@@ -42,15 +26,28 @@ def parse():
 		verbosity = args.verbosity
 		
 	return args
+
+# I would except only RuntimeError here normally but if I do I get an "Invalid code lengths set" error pretty soon after it starts to run
+# If anyone knows what causes this, I'd love to know!
+def tryCrack(password, zipFile):
+	try:
+		zipFile.extractall(pwd = password)
+		print
+		print (TEXT_COLOUR_GREEN + ("[+] Success! Found password for archive '%s' in %s seconds: '%s'" % (args.zipFile, round(time.clock() - startTime, 2), password)))
+		print (("[+] Extracted archive '%s'." % args.zipFile) + TEXT_COLOUR_RESET)
+		os._exit(1)
+	except:
+		return
 	
 def main():
 	global args
 	
 	args = parse()
 	z = zipfile.ZipFile(args.zipFile)
+	
 	startString = []
-	counter = 1
-	maxCombinations = nCr(26, args.noOfLetters)
+	
+	scan = 0
 	
 	flag_exhaustedAllCombinations = False
 	flag_uppercaseAlphabet = False
@@ -60,7 +57,7 @@ def main():
 	
 	alphabet_upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	alphabet_lowerCase = "abcdefghijklmnopqrstuvwxyz"
-	numbers = "123456789"
+	numbers = "0123456789"
 	specialCharacters = " !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
 	
 	if "=" in args.characterSet:
@@ -103,33 +100,31 @@ def main():
 			tryCrack(''.join(startString), z)
 			startString[-1] = letter
 			
-			if counter > maxCombinations:
-				flag_exhaustedAllCombinations = True	
-			counter += 1
+			reversedStartString = list(reversed(startString))
 			
-			# checks if the last letter of the password (currently an array) is "Z" then loops through the list looking for other "Z"s
-			# each iteration, sets posJ to the index at which j is currently at in the list
-			# when it finds a "Z" and if the element isn't at index 0, tries to crack the zip file with that password, then advances 
-			# the letter one element before by one ("A" -> "B", "B" -> "C", etc).
-			# finally, sets the letter at the current index back to "A"
-			# if the position of the current "Z" IS at index 0, the script will simply try to crack the zip file with this password and
-			# then set the letter at the current index back to "A" so to avoid the rightmost letter (index -1) being messed with.
+			# the while loop and subsequent code here essentially scans through reversedStartString until reversedStartString[scan] is not a 
+			# "Z" character, advances this character by 1 ("A" -> "B", "B" -> "C", etc.) then sets every "Z" character in the string back to
+			# "A". The purpose of this code is to ensure that at times where there is more than one "Z" in the password being tried, the 
+			# string isn't set to "A[A" -> "A[B", etc (as the [ character is the character after Z in ascii), or "BAZ" -> "BBA" 
+			# (which would skip the whole "BA<thirdCharacter>" branch).
 			
-			if startString[-1] == "Z":
-				for j in startString:
-					posJ = startString.index(j)
-					if (j == "Z"):
-						if (posJ != 0):
-							if args.verbosity:
-								print "[*] Trying: %s" % ''.join(startString)
-							tryCrack(''.join(startString), z)
-							startString[posJ - 1] = chr(ord(startString[posJ - 1]) + 1)
-							startString[posJ] = "A"
-						else:
-							if args.verbosity:
-								print "[*] Trying: %s" % ''.join(startString)
-							tryCrack(''.join(startString), z)
-							startString[posJ] = "A"
+			if reversedStartString[0] == "Z":
+				if ''.join(reversedStartString) == "Z" * args.noOfLetters:
+					flag_exhaustedAllCombinations = True
+				else:
+					if args.verbosity:
+						print "[*] Trying: %s" % ''.join(startString)
+					tryCrack(''.join(startString), z)
+					while (reversedStartString[scan] == "Z") and (scan + 1 < args.noOfLetters):
+						scan += 1
+				
+					reversedStartString[scan] = chr(ord(reversedStartString[scan]) + 1)
+			
+					for j in range(scan):
+						reversedStartString[j] = "A"
+				
+					scan = 0
+					startString = list(reversed(reversedStartString))
 
 	# this should only run if the while loop has been exited and so the password wasn't found
 	print (TEXT_COLOUR_RED + "[-] The zip file's password was not found. Trying a different number of characters or a different character set might help.")
@@ -139,4 +134,4 @@ def main():
 if __name__ == "__main__":
 	main()
 
-# TODO: Actually implement different character sets. 
+# TODO: Actually implement different character sets.
