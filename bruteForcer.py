@@ -59,19 +59,14 @@ def main():
 	alphabet_lowerCase = "abcdefghijklmnopqrstuvwxyz"
 	numbers = "0123456789"
 	specialCharacters = " !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
-	
-	if "=" in args.characterSet:
-		characterSetString = args.characterSet.split("=")[1]
-	else:
-		characterSetString = args.characterSet
 		
-	if "A" in characterSetString:
+	if "A" in args.characterSet:
 		flag_uppercaseAlphabet = True
-	if "a" in characterSetString:
+	if "a" in args.characterSet:
 		flag_lowercaseAlphabet = True
-	if "n" in characterSetString:
+	if "n" in args.characterSet:
 		flag_numbers = True
-	if "s" in characterSetString:
+	if "s" in args.characterSet:
 		flag_specialChars = True
 		
 	# creates an array of size noOfLetters and sets each element in the array to "A" (arrays are mutable; strings aren't)
