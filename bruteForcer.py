@@ -22,14 +22,14 @@
 import zipfile, argparse, time, os, sys
 
 # these variables will improve readability later on in the program
-TEXT_COLOUR_GREEN = "\033[92m" 
-TEXT_COLOUR_RED = "\033[91m" 
-TEXT_COLOUR_RESET = "\033[0m" 
+TEXT_COLOUR_GREEN = "\033[92m"
+TEXT_COLOUR_RED = "\033[91m"
+TEXT_COLOUR_RESET = "\033[0m"
 
 def parse():
 	parser = argparse.ArgumentParser(epilog = "Example: bruteForcer.py 3 Aans passwords.zip -v")
 	parser.add_argument("noOfCharacters", metavar = "<NOOFCHARACTERS>", type = int, help = "How many characters does the password contain? Enter \"-1\" if you don't know (just be careful, this can start an infinite loop very easily and you might need to mash Ctrl+C a few times to exit the program if you use the wrong character set).")
-	parser.add_argument("characterSet", metavar = "<CHARACTERSET>", help = "The character set(s) to use. Type A for uppercase letters, a for lowercase letters, n for numbers, and s for special characters. You can use any combination of A, a, n or s.")
+	parser.add_argument("characterSet", metavar = "<CHARACTERSET>", help = "The character set(s) to use. Type A for uppercase letters, a for lowercase letters, n for numbers, and s for special characters. You can use any of the 24 combinations of A, a, n, and s.")
 	parser.add_argument("zipFile", metavar = "<ZIPFILE>", help = "The zip file that we are attempting to crack.")
 	parser.add_argument("-v", "--verbosity", help = "Run program in verbose mode", action = "store_true", default = False)
 	args = parser.parse_args()
@@ -43,19 +43,19 @@ def parse():
 		verbosity = args.verbosity
 		
 	return args
-	
+
 def spin():
 	while True:
 		for cursor in "|||||||///////-------\\\\\\\\\\\\\\":
 			yield cursor
-
+			
 def failed():
 	print
 	print TEXT_COLOUR_RED + "[-] The zip file's password was not found. Trying a different number of characters or a different character set might help."
 	print ("[-] Script ran in %s seconds." % round(time.clock() - startTime, 2)) + TEXT_COLOUR_RESET
 	exit(0)
-			
-# I would except only RuntimeError here normally but if I do I get an "Invalid code lengths set" error pretty soon after it starts to run
+	
+# I would except only RuntimeError here normally but if I do I get an "Invalid code lengths set" error pretty soon after the program starts to run
 # If anyone knows what causes this, I'd love to know!
 def tryCrack(password, zipFile):
 	try:
@@ -66,9 +66,9 @@ def tryCrack(password, zipFile):
 		os._exit(1)
 	except:
 		return
-	
+		
 def main():
-	# constats
+	# constants
 	UPPER_CASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	LOWER_CASE = "abcdefghijklmnopqrstuvwxyz"
 	NUMBERS = "0123456789"
@@ -86,10 +86,9 @@ def main():
 	scan = 0
 	cycleCounter = abs(args.noOfCharacters)
 	flag_exhaustedAllCombinations = False
-	flag_appendChar = False
 	dialogue = ""
 	confirm = ""
-		
+	
 	if "A" in args.characterSet:
 		dialogue += UPPER_CASE
 		chosenCharacterSets.append("A (upper case)")
@@ -101,17 +100,17 @@ def main():
 		chosenCharacterSets.append("n (numbers)")
 	if "s" in args.characterSet:
 		dialogue += SPECIAL_CHARACTERS
-		chosenCharacterSets.append("s (symbols)")
+		chosenCharacterSets.append("s (special characters)")
 		
-	# I use an array instead of a string because in Python, arrays are mutable while strings aren't
+	# I use an array instead of a string because in Python, arrays are mutable, whilst strings aren't.
 	for i in range(abs(args.noOfCharacters)):
 		currentPassword.append(dialogue[0])
-	
+		
 	print
 	print "[*] You have chosen to attempt to crack a password which has %s characters." % (args.noOfCharacters if args.noOfCharacters != -1 else "an indeterminate number of")
-	print "[*] You have chosen to use the character sets %s." %  (', '.join(chosenCharacterSets))
+	print "[*] You have chosen to use the character sets %s." % (', '.join(chosenCharacterSets))
 	print
-	print "[*] Begin cracking? (Y / N)" 
+	print "[*] Begin cracking? (Y / N)"
 	while confirm not in ["Y", "y", "N", "n"]:
 		confirm = raw_input()
 		if (confirm == "N") or (confirm == "n"):
@@ -120,7 +119,7 @@ def main():
 			exit(0)
 		elif (confirm == "Y") or (confirm == "y"):
 			pass
-	
+			
 	startTime = time.clock()
 	
 	# in case the zip file doesn't actually have a password / is 0 characters in length
@@ -135,7 +134,7 @@ def main():
 			failed()
 		else:
 			pass
-	
+			
 	while not flag_exhaustedAllCombinations:
 		if not args.verbosity:
 			timeMessage = "[%s] Taken %s seconds so far..." % (spinner.next(), round(time.clock() - startTime, 2))
@@ -153,11 +152,11 @@ def main():
 			
 			# checks if the final character of currentPassword is equal to the final character of dialogue (the string containing all possible
 			# characters, generated from the character sets chosen when calling the program). Prints the password being tested if program was
-			# run in verbose mode. Tries to crack the password on the zip file using this password. Checks if the password string consists
-			# of the final character in the dialogue string repeated args.noOfCharacters times. If a definite number of characters for the 
+			# run in verbose mode. Tries to crack the password on the zip file using this password. Checks if password string consists
+			# of the final character in the dialogue string repeated args.noOfCharacters times. If a definite number of characters for the
 			# password was defined, all possible password permutations must have been tested, so the brute force attack failed. However, if
 			# an indefinite number of characters for the password was defined (args.noOfCharacters == -1), appends another dialogue[0]
-			# character to the currentPassword array, sets every character in the array to "A", and starts the loop over again.
+			# character to the currentPassword array, sets every character in the array to dialogue[0], and starts the loop over again.
 			
 			# the else branch after the statement cycleCounter += 1 loops the currentPassword array correctly, even when there is more than
 			# one dialogue[-1] character in the array (e.g. "BZY" -> "BZZ" -> "CAA" -> "CAB" -> ...)
@@ -177,17 +176,17 @@ def main():
 				else:
 					while reversedCurrentPassword[scan] == dialogue[-1]:
 						scan += 1
-					
+						
 					reversedCurrentPassword[scan] = dialogue[dialogue.index(reversedCurrentPassword[scan]) + 1]
 					
 					for i in range(scan):
 						reversedCurrentPassword[i] = dialogue[0]
-					
+						
 					scan = 0
 					currentPassword = list(reversed(reversedCurrentPassword))
-					
+		
 	# this should only run if the while loop has been exited and so the password wasn't found
 	failed()
-
+	
 if __name__ == "__main__":
 	main()
