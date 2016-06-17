@@ -14,20 +14,11 @@
 
 import hashlib, argparse
 
-# here I map three text colour-altering ANSI strings to global variables to increase readability later in the program
-global TEXT_COLOUR_GREEN
-global TEXT_COLOUR_RED
-global TEXT_COLOUR_RESET
-
-TEXT_COLOUR_GREEN = "\033[92m"
-TEXT_COLOUR_RED = "\033[91m"
-TEXT_COLOUR_RESET = "\033[0m"
-
 def main():
 	# I actually used argparse this time. It's a lot more user-friendly and not deprecated
 	parser = argparse.ArgumentParser()
 	parser.add_argument("filename", help = "File to crack MD5 hashes from (each hash must be on its own newline-separated line)", metavar = "<FILENAME>")
-	parser.add_argument("wordlist", help = "Wordlist containing possible plaintext for the hashes (each word must be on its own newline-separated line)", metavar = "<WORDLIST>")
+	parser.add_argument("wordlist", help = "Wordlist containing possible passwords (each word must be on its own newline-separated line)", metavar = "<WORDLIST>")
 	parser.add_argument("-v", "--verbose", help = "Run program in verbose mode (outputs words being tested against hash. Not required, default False)", action = "store_true")
 	args = parser.parse_args()
 	if (args.filename == None) | (args.wordlist == None):
@@ -36,7 +27,7 @@ def main():
 	else:
 		filename = args.filename
 		wordlist = args.wordlist
-		verbosity = args.verbosity
+		verbose = args.verbose
 
 	# will be used later
 	crackedHashes = []
@@ -54,7 +45,7 @@ def main():
 				# change the hex digest)
 				m = hashlib.md5()
 				m.update(word.strip())
-				if verbosity:
+				if verbose:
 					print "[*] Trying '%s' [%s]" % (word.strip(), m.hexdigest())
 				if m.hexdigest() == line.strip():
 					flag_found = True
@@ -70,19 +61,19 @@ def main():
 	print
 	
 	# I know that formatting a string conditionally inside an if statement is probably bad practice but fuck it, it looks good
+	# \033[92m turns the text green, \033[91m turns it red, \033[0m turns it back to its original colour
 	if len(crackedHashes) > 0:
-		print (TEXT_COLOUR_GREEN + "[+] Cracked %i %s (%i total)") % (len(crackedHashes), ("hashes" if len(crackedHashes) != 1 else "hash"), (len(crackedHashes) + len(uncrackedHashes)))
+		print "\033[92m[+] Cracked %i %s (%i total)" % (len(crackedHashes), ("hashes" if len(crackedHashes) != 1 else "hash"), (len(crackedHashes) + len(uncrackedHashes)))
 		for i in crackedHashes:
 			m = hashlib.md5()
 			m.update(i)
 			print "[+] %s [%s]" % (i, m.hexdigest())
-		print TEXT_COLOUR_RESET	
+		print "\033[0m"	
 	
 	if len(uncrackedHashes) > 0:
-		print (TEXT_COLOUR_RED + "[-] Failed to crack %i %s (%i total)") % (len(uncrackedHashes), ("hashes" if len(uncrackedHashes) != 1 else "hash"), (len(crackedHashes) + len(uncrackedHashes)))
+		print "\033[91m[-] Failed to crack %i %s (%i total)" % (len(uncrackedHashes), ("hashes" if len(uncrackedHashes) != 1 else "hash"), (len(crackedHashes) + len(uncrackedHashes)))
 		for i in uncrackedHashes:
 			print "[-] %s" % i
-		print TEXT_COLOUR_RESET
+		print "\033[0m"
 
-if __name__ == "__main__":
-	main()
+main()
