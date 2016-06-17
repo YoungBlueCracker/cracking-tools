@@ -31,7 +31,7 @@ def parse():
 	parser.add_argument("noOfCharacters", metavar = "<NOOFCHARACTERS>", type = int, help = "How many characters does the password contain? Enter \"-1\" if you don't know (just be careful, this can start an infinite loop very easily and you might need to mash Ctrl+C a few times to exit the program if you use the wrong character set).")
 	parser.add_argument("characterSet", metavar = "<CHARACTERSET>", help = "The character set(s) to use. Type A for uppercase letters, a for lowercase letters, n for numbers, and s for special characters. You can use any of the 24 combinations of A, a, n, and s.")
 	parser.add_argument("zipFile", metavar = "<ZIPFILE>", help = "The zip file that we are attempting to crack.")
-	parser.add_argument("-v", "--verbosity", help = "Run program in verbose mode", action = "store_true", default = False)
+	parser.add_argument("-v", "--verbose", help = "Run program in verbose mode", action = "store_true", default = False)
 	args = parser.parse_args()
 	if (args.noOfCharacters == None) or (args.characterSet == None) or (args.zipFile == None):
 		print parser.usage()
