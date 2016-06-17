@@ -28,7 +28,7 @@ def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("filename", help = "File to crack MD5 hashes from (each hash must be on its own newline-separated line)", metavar = "<FILENAME>")
 	parser.add_argument("wordlist", help = "Wordlist containing possible plaintext for the hashes (each word must be on its own newline-separated line)", metavar = "<WORDLIST>")
-	parser.add_argument("-v", "--verbosity", help = "Run program in verbose mode (outputs words being tested against hash. Not required, default False)", action = "store_true")
+	parser.add_argument("-v", "--verbose", help = "Run program in verbose mode (outputs words being tested against hash. Not required, default False)", action = "store_true")
 	args = parser.parse_args()
 	if (args.filename == None) | (args.wordlist == None):
 		print parser.usage
