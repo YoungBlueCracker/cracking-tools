@@ -22,4 +22,4 @@ USAGE: `bruteForcer.py <NOOFCHARACTERS> <CHARACTERSET> <ZIPFILE> [-h] [-v]` <br 
 NOOFCHARACTERS: The number of characters in the password. If unknown, enter -1; this will test every combination of one character, then every combination of two characters, then three, etc. Be careful, this can easily start an infinite loop with an incorrect character set. <br />
 CHARACTERSET: The character set(s) to use. Use A to test upper case letters, a to test lower case letters, n to test numbers and s to test special characters. You can use any combination of A, a, n and s, e.g. A, s, sa, Aans, snaA, etc. <br />
 ZIPFILE: The zip file we are trying to crack. <br />
--v: verbose mode (outputs word being attempted)
+-v: verbose mode (outputs word being attempted).
