@@ -40,7 +40,7 @@ def parse():
 		noOfCharacters = args.noOfCharacters
 		characterSet = args.characterSet
 		zipFile = args.zipFile
-		verbosity = args.verbosity
+		verbose = args.verbose
 		
 	return args
 
@@ -136,14 +136,14 @@ def main():
 			pass
 			
 	while not flag_exhaustedAllCombinations:
-		if not args.verbosity:
+		if not args.verbose:
 			timeMessage = "[%s] Taken %s seconds so far..." % (spinner.next(), round(time.clock() - startTime, 2))
 			sys.stdout.write(timeMessage)
 			for i in range(len(timeMessage)):
 				sys.stdout.write("\b")
 				
 		for letter in dialogue:
-			if args.verbosity:
+			if args.verbose:
 				print "[*] Trying: %s" % ''.join(currentPassword)
 			tryCrack(''.join(currentPassword), z)
 			currentPassword[-1] = letter
@@ -162,7 +162,7 @@ def main():
 			# one dialogue[-1] character in the array (e.g. "BZY" -> "BZZ" -> "CAA" -> "CAB" -> ...)
 			
 			if currentPassword[-1] == dialogue[-1]:
-				if args.verbosity:
+				if args.verbose:
 					print "[*] Trying: %s" % ''.join(currentPassword)
 				tryCrack(''.join(currentPassword), z)
 				if ''.join(currentPassword) == dialogue[-1] * cycleCounter:
