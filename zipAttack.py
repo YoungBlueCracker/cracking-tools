@@ -21,7 +21,7 @@ def parse():
 	parser = optparse.OptionParser("Usage: zipAttack.py -f <zipfile> -w <wordlist>")
 	parser.add_option("-f", dest="zname", type="string", help="specify zip file (required)")
 	parser.add_option("-w", dest="wname", type="string", help="specify word list (required)")
-	parser.add_option("-v", dest="verbosity", action="store_true", help="increase verbosity (not required, default false)")
+	parser.add_option("-v", dest="verbose", action="store_true", help="increase verbosity (not required, default false)")
 	(options, args) = parser.parse_args()
 	if (options.zname == None) | (options.wname == None):
 		print parser.usage
