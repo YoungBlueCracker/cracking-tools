@@ -23,3 +23,5 @@ NOOFCHARACTERS: The number of characters in the password. If unknown, enter -1; 
 CHARACTERSET: The character set(s) to use. Use A to test upper case letters, a to test lower case letters, n to test numbers and s to test special characters. You can use any combination of A, a, n and s, e.g. A, s, sa, Aans, snaA, etc. <br />
 ZIPFILE: The zip file we are trying to crack. <br />
 -v, --verbose: verbose mode (outputs word being attempted).
+
+Note: the special characters utilized in this script are ``<space>!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~``
